@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DALL·E Image Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background: #f4f4f4;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        input {
+            padding: 10px;
+            width: 60%;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+        #image-container {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        img {
+            width: 256px;
+            height: 256px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>DALL·E Image Generator</h1>
+    <input type="text" id="prompt" placeholder="Enter image description...">
+    <button onclick="generateImage()">Generate Image</button>
+
+    <div id="image-container"></div>
+
+    <script>
+        function generateImage() {
+            const prompt = document.getElementById("prompt").value;
+            if (!prompt) {
+                alert("Please enter a description!");
+                return;
+            }
+
+            fetch(`/generateimage/${encodeURIComponent(prompt)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.image_urls) {
+                        document.getElementById("image-container").innerHTML = 
+                            data.image_urls.map(url => `<img src="${url}" alt="Generated Image">`).join('');
+                    } else {
+                        alert(data.error || "Error generating image. Please try again later.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Something went wrong!");
+                });
+        }
+    </script>
+
+</body>
+</html>
