@@ -1,4 +1,4 @@
-# Interview-Question-Creator-Project -Using Langchain
+# imagegeneration-Creator-Project -Using DALL·E
 
 ### How to run?
 
